@@ -27,6 +27,7 @@ def proof(*args,**kwargs):
 	else:
 		x+="Ineligible"
 	x+="""</h1>
+	<div>
 	<dl>
 	<dt>Student Name</dt>
 	<dd>"""+kwargs["studentname"]+"""</dd>
@@ -34,7 +35,8 @@ def proof(*args,**kwargs):
 	<dd>"""+kwargs["studentno"]+"""
 	<dt>Enrollment Status</dt>
 	<dd>"""+kwargs["enrollment"]+"""
-	</dl>
+	</dl></div>
+	<div>
 	<table>
 	<thead>
 		<td>Course Code</td>
@@ -49,7 +51,7 @@ def proof(*args,**kwargs):
 		<td>"""+str(course.hours)+"""</td>
 	</tr>"""
 	x+="""
-	</table>
+	</table></div>
 	</div></div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

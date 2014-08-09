@@ -79,3 +79,12 @@ def parseStudyLoad(page):
 			return inputs[0]["value"]
 	except KeyError as e:
 		return inputs[1]["value"]
+
+def parseMyPage(page):
+	soup=BeautifulSoup(page)
+	details=[x for x in soup.find_all('div') if _rightID(x,"uq_tpl_bar")]
+	detailsv2=[x for x in soup.find_all('div') if _rightID(x,"uqfooter-content")]
+	studentNoRegex="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"
+	studentno=re.findall(studentNoRegex,details[0].descendants.next().find_next("p").contents[0])[0]
+	studentname=str(detailsv2[0].find_all('p')[0]).split("-")[1].split("(")[0].strip()
+	return (studentname,studentno)

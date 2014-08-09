@@ -12,6 +12,7 @@ class index(webapp2.RequestHandler):
 	def post(self):
 		postVars=self.request.POST
 		browser=auth(postVars["username"],postVars["password"])
+		studentname,studentno=parseMyPage(pullMyPage(browser))
 		ttlist=parseTimetable(pullTimetable(browser))
 		cl=parseCourseList(pullCourses(browser))
 		Course = namedtuple("Course",["code","title","hours"])
@@ -28,7 +29,7 @@ class index(webapp2.RequestHandler):
 			eligible=True
 		else:
 			eligible=False
-		self.response.write(proof(title="TransAuth",courselist=courseList,enrollment=enrollment, studentname="test",studentno="test",eligible=eligible))
+		self.response.write(proof(title="TransAuth",courselist=courseList,enrollment=enrollment, studentname=studentname,studentno=studentno,eligible=eligible))
 
 urls = [
 	('/', index)

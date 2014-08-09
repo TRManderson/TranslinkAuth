@@ -11,7 +11,6 @@ def auth(username,password):
 	browser.form["timezoneOffset"]="-600"
 	browser.form["userid"]=username.upper()
 	browser.submit()
-	browser.open("https://www.sinet.uq.edu.au/psp/ps/EMPLOYEE/HRMS/h/?tab=UQ_MYPAGE&pageletname=MENU&cmd=refreshPglt")
 	return browser
 
 def pullClosure(url):
@@ -20,6 +19,7 @@ def pullClosure(url):
 		return browser.response().read()
 	return closure
 
+pullMyPage=pullClosure("https://www.sinet.uq.edu.au/psp/ps/EMPLOYEE/HRMS/h/?tab=UQ_MYPAGE")
 pullCourses=pullClosure("https://www.sinet.uq.edu.au/psc/ps_4/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_CRSE_HOME.GBL")
 pullTimetable=pullClosure("https://www.sinet.uq.edu.au/psc/ps_2/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_TM_TBL_LIST.GBL?&STRM=6460")
 pullStudyLoad=pullClosure("https://www.sinet.uq.edu.au/psc/ps/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_CHG_STDY_LOAD.GBL")
