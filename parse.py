@@ -30,11 +30,15 @@ def _detailify(courseElement):
 	code=re.findall("[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]",str(codeDiv))[0]
 	return (code, title, units)
 
-def parsePage(page):
-	soup=BeautifulSoup(page)
+def parsePage(page, returnType="courses"):
+	soup=BeautifulSoup(page.replace(")\"\"", ")\""))
 	rows=soup.find_all('div')
 	semesters=[x for x in rows if _rightID(x,"win4divACTION_NBRGP")]
 	index=[_withinDate(_pullDates(x.contents[0])[0],_pullDates(x.contents[0])[1]) for x in semesters].index(True)
 	rows=soup.find_all('tr')
 	courses=[x for x in rows if _rightID(x, "trACTION_NBR$"+str(index))]
-	return [_detailify(x) for x in courses]
+	if returnType == "courses":
+		return [_detailify(x) for x in courses]
+	elif returnType == "timetableHours":
+		return None
+
