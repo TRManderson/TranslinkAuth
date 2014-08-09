@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
 import re
+from collections import namedtuple
 
 def _rightID(x,id):
 	try:
@@ -53,7 +54,13 @@ def parseTimetable(page):
 	endTimes=[x.contents[0].strip() for x in rows if _rightID(x,"UQ_DRV_TTBLE_HP_UQ_END_TM$") and x.contents[0].strip() != ""]
 	timeDiffs=map(_strTimeDiff,startTimes,endTimes)
 	tuples=map(lambda x,y: (x,y),courseTitles,timeDiffs)
-	return tuples
+	courseDict={}
+	setls=set(map(lambda x: x[0],tuples))
+	for i in setls:
+		courseDict[i]=0
+	for title,val in tuples:
+		courseDict[title]+=val
+	return courseDict
 
 def _suitableRow(content):
 	if content.startswith("<td width=\"40%\"><b>Student Number:</b></td>"):

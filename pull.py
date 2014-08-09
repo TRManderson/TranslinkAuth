@@ -21,5 +21,6 @@ def pullClosure(url):
 	return closure
 
 pullCourses=pullClosure("https://www.sinet.uq.edu.au/psc/ps_4/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_CRSE_HOME.GBL")
-pullTimetable=pullClosure("https://www.sinet.uq.edu.au/psc/ps_2/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_TM_TBL_LIST.GBL?&STRM=6420")
+pullTimetable=pullClosure("https://www.sinet.uq.edu.au/psc/ps_2/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_TM_TBL_LIST.GBL?&STRM=6460")
 pullStudyLoad=pullClosure("https://www.sinet.uq.edu.au/psc/ps/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_CHG_STDY_LOAD.GBL")
+pullAddress=pullClosure("https://www.sinet.uq.edu.au/psc/ps/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_ADDR.GBL")
