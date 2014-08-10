@@ -109,3 +109,8 @@ def parseAddress(page):
 	if sem==pos:
 		return [sem]
 	return [sem,pos]
+
+def parsePhone(page):
+	soup=BeautifulSoup(page)
+	inputLs=[x for x in soup.find_all("input") if _rightID(x,"UQ_DRV_PERSPHON_")]
+	return inputLs[0]["value"]

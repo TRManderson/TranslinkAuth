@@ -2,7 +2,7 @@ import webapp2
 from parse import *
 from pull import *
 from collections import namedtuple
-from put import landing,proof
+from put import *
 from paste import httpserver
 
 
@@ -45,6 +45,7 @@ class index(webapp2.RequestHandler):
 class pdf(webapp2.RequestHandler):
 	def post(self):
 		data={}
+		postVars=self.request.POST
 		browser=auth(postVars["username"],postVars["password"])
 		try:
 			x=parseMyPage(pullMyPage(browser))
@@ -67,16 +68,22 @@ class pdf(webapp2.RequestHandler):
 			data["postpostcode"]=pos[4]
 		else:
 			data["as_above"]="T"
-		addr=addresses[0]
+		pos=addresses[0]
 		data["resunit/num"]=pos[0]
 		data["resstreet"]=pos[1]
 		data["ressuburb"]=pos[2]
 		data["resstate"]=pos[3]
 		data["respostcode"]=pos[4]
+		data["phone"]=parsePhone(pullPhone(browser))
+		data["email"]=postVars["username"]+"@student.uq.edu.au"
+		self.response.headers['Content-Type'] = 'application/pdf'
+		self.response.headers['Content-Disposition'] = "attachment;filename=ttcc.pdf"
+		self.response.write(mapPdf(data).read())
+
 
 
 urls = [
-	('/', index)
+	('/', index),
 	('/ttcc.pdf',pdf)
 	]
 

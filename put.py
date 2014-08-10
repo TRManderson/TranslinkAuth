@@ -1,7 +1,8 @@
-import datetime.datetime
+from datetime import datetime
 import pypdftk
 
 def proof(*args,**kwargs):
+	hours=sum(map(lambda x: x[2],kwargs["courselist"]))
 	x="""<!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,15 @@ def proof(*args,**kwargs):
 	else:
 		x+="Ineligible"
 	x+="""</h1>
-	<div class="text-left">
+	"""
+	if hours >= 12:
+		if kwargs["enrollment"]=="Full Time":
+			x+="<p>They are considered a full time student and attend 12 or more contact hours a week</p>"
+		else:
+			x+="<p>They attend 12 or more contact hours a week</p>"
+	elif kwargs["enrollment"]=="Full Time":
+			x+="<p>They are considered a full time student</p>"
+	x+="""<div class="text-left">
 	<dl>
 	<dt>Student Name</dt>
 	<dd>"""+kwargs["studentname"]+"""</dd>
@@ -86,27 +95,25 @@ def landing(*args, **kwargs):
 <body>
 <div class="jumbotron"><div class="container text-center">
 	<h1>Translink Auth</h1>
-	<p>Prove to Translink you're a full time student,
-	and get a filled-out TTCC application while you're at it</p>
+	<p>Prove to Translink you're a full time student
+	and get a filled-out TTCC application if you've been lazy so far!</p>
 
 	<form role="form" method="POST" action="/">
-		<div class="form-grounp">
+		<div class="form-group">
 		<input type="text" name="username" placeholder="Username" value=\""""+kwargs["usr"]+"""\"/>
 		</div>
-		<div class="form-grounp """
+		<div class="form-group """
 	if kwargs["incorrect"]:
 		x+="has-warning"
 	x+="""\">
 		<input type="password" name="password" placeholder="Password" />
 		</div>
-		<div class="form-grounp">
+		<div class="form-group">
 		<input type="submit" class="btn btn-default" name="btn" value="Prove Yourself!" />
-		<input type="submit" class="btn btn-default" name="btn" value="Get a TTCC Form" />
 		</div>
-		<!--<div class="form-grounp">
-
-		<input type="submit" class="btn btn-default"TTCC Application</button>
-		</div>-->
+		<div class="form-group">
+		<input type="button" onClick="this.form.action='/ttcc.pdf';this.form.submit()" class="btn btn-default" name="btn" value="Get a TTCC Form" />
+		</div>
 	</form>
 	"""+str(kwargs["extra"])+"""
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -156,5 +163,5 @@ def mapPdf(kwargs):
 	except:
 		pass
 	newfile=pypdftk.fill_form("./new.pdf",pdfData)
-	f=open(newfile)
+	f=open(newfile,"rb")
 	return f
