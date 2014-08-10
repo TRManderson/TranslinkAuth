@@ -8,10 +8,14 @@ from paste import httpserver
 
 class index(webapp2.RequestHandler):
 	def get(self):
-		self.response.write(landing(title="TransAuth"))
+		self.response.write(landing(title="TransAuth",extra=""))
 	def post(self):
 		postVars=self.request.POST
-		browser=auth(postVars["username"],postVars["password"])
+		try:
+			browser=auth(postVars["username"],postVars["password"])
+		except Exception as e:
+			self.response.write(landing(title="TransAuth",extra="Invalid username or password"))
+			return
 		studentname,studentno=parseMyPage(pullMyPage(browser))
 		ttlist=parseTimetable(pullTimetable(browser))
 		cl=parseCourseList(pullCourses(browser))

@@ -100,6 +100,7 @@ def landing(*args, **kwargs):
 		<input type="submit" class="btn btn-default"TTCC Application</button>
 		</div>-->
 	</form>
+	"""+str(kwargs["extra"])+"""
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </div></div>
