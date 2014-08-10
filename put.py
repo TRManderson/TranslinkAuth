@@ -1,3 +1,6 @@
+import datetime.datetime
+import pypdftk
+
 def proof(*args,**kwargs):
 	x="""<!DOCTYPE html>
 <html>
@@ -97,9 +100,11 @@ def landing(*args, **kwargs):
 		<input type="password" name="password" placeholder="Password" />
 		</div>
 		<div class="form-grounp">
-		<input type="submit" class="btn btn-default" value="Prove Yourself!" />
+		<input type="submit" class="btn btn-default" name="btn" value="Prove Yourself!" />
+		<input type="submit" class="btn btn-default" name="btn" value="Get a TTCC Form" />
 		</div>
 		<!--<div class="form-grounp">
+
 		<input type="submit" class="btn btn-default"TTCC Application</button>
 		</div>-->
 	</form>
@@ -111,3 +116,45 @@ def landing(*args, **kwargs):
 </html>
 """
 	return x
+
+def mapPdf(kwargs):
+	try:
+		pdfData={}
+		if kwargs["title"]=="Mr":
+			pdfData["RB2"]=1
+		elif kwargs["title"]=="Mrs":
+			pdfData["RB2"]=2
+		elif kwargs["title"]=="Miss":
+			pdfData["RB2"]=3
+		elif kwargs["title"]=="Ms":
+			pdfData["RB2"]=4
+		else:
+			pdfData["Text2"]=kwargs["title"]
+			pdfData["RB2"]=5
+		pdfData["Text3"]=kwargs["surname"]
+		pdfData["Text4"]=kwargs["givennames"]
+		pdfData["Text5"]="University of Queensland"
+		pdfData["SN1"]=kwargs["studentno"]
+		pdfData["Text6"]=kwargs["resunit/num"]
+		pdfData["Text7"]=kwargs["resstreet"]
+		pdfData["Text8"]=kwargs["ressuburb"]
+		pdfData["Text9"]=kwargs["resstate"]
+		pdfData["Text10"]=kwargs["respostcode"]
+		if kwargs["as_above"]=="T":
+			pdfData["Text11"]="As above"
+		else:
+			pdfData["Text11"]=kwargs["postaddress"]
+			pdfData["Text12"]=kwargs["postsuburb"]
+			pdfData["Text13"]=kwargs["poststate"]
+			pdfData["Text14"]=kwargs["postpostcode"]
+		pdfData["Text15"]=kwargs["phone"]
+		pdfData["Text16"]=kwargs["email"]
+		now=datetime.now()
+		pdfData["Text17"]=now.strftime("%d")
+		pdfData["Text18"]=now.strftime("%m")
+		pdfData["Text19"]=now.strftime("%y")
+	except:
+		pass
+	newfile=pypdftk.fill_form("./new.pdf",pdfData)
+	f=open(newfile)
+	return f

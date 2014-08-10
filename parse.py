@@ -86,5 +86,26 @@ def parseMyPage(page):
 	detailsv2=[x for x in soup.find_all('div') if _rightID(x,"uqfooter-content")]
 	studentNoRegex="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"
 	studentno=re.findall(studentNoRegex,details[0].descendants.next().find_next("p").contents[0])[0]
+	title=details[0].descendants.next().find_next("p").contents[0].split(" ")[1]
 	studentname=str(detailsv2[0].find_all('p')[0]).split("-")[1].split("(")[0].strip()
-	return (studentname,studentno)
+	return (studentname,studentno,title)
+
+def _addrBlockToTuple(content):
+	content=content.find_all('td')
+	streetAddr=content[1].contents[0]
+	num=streetAddr.split(" ")[0]
+	street=" ".join(streetAddr.split(" ")[1:])
+	suburb=content[3].contents[0]
+	state=content[5].contents[0]
+	postcode=str(content[7])[-9:-5]
+	return (num, street, suburb, state, postcode)
+
+def parseAddress(page):
+	soup=BeautifulSoup(page)
+	semBlock=[x for x in soup.find_all('div') if _rightID(x,"win0divUQ_DRV_ADDR_UQ_ADDR_SUMM_SEM")][0]
+	posBlock=[x for x in soup.find_all('div') if _rightID(x,"win0divUQ_DRV_ADDR_UQ_ADDR_SUMM_MAIL")][0]
+	sem=_addrBlockToTuple(semBlock)
+	pos=_addrBlockToTuple(posBlock)
+	if sem==pos:
+		return [sem]
+	return [sem,pos]

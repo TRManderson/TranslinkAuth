@@ -15,7 +15,7 @@ class index(webapp2.RequestHandler):
 		postVars=self.request.POST
 		browser=auth(postVars["username"],postVars["password"])
 		try:
-			studentname,studentno=parseMyPage(pullMyPage(browser))
+			studentname,studentno,useless=parseMyPage(pullMyPage(browser))
 		except Exception as e:
 			errorMessage="<p class=\"text-danger\">Invalid username or password</p>"
 			self.response.write(landing(title="TransAuth",extra=errorMessage,usr=postVars["username"],incorrect=True))
@@ -42,10 +42,44 @@ class index(webapp2.RequestHandler):
 			eligible=False
 		self.response.write(proof(title="TransAuth",courselist=courseList,enrollment=enrollment, studentname=studentname,studentno=studentno,eligible=eligible))
 
+class pdf(webapp2.RequestHandler):
+	def post(self):
+		data={}
+		browser=auth(postVars["username"],postVars["password"])
+		try:
+			x=parseMyPage(pullMyPage(browser))
+			fullname=x[0]
+			data["surname"]=fullname.split(" ")[-1]
+			data["givennames"]=" ".join(fullname.split(" ")[:-1])
+			data["studentno"]=x[1]
+			data["title"]=x[2]
+		except Exception as e:
+			errorMessage="<p class=\"text-danger\">Invalid username or password</p>"
+			self.response.write(landing(title="TransAuth",extra=errorMessage,usr=postVars["username"],incorrect=True))
+			return
+		addresses=parseAddress(pullAddress(browser))
+		if len(addresses)!=1:
+			data["as_above"]="F"
+			pos=addresses[1]
+			data["postaddress"] =pos[0]+" "+pos[1]
+			data["postsuburb"]=pos[2]
+			data["poststate"]=pos[3]
+			data["postpostcode"]=pos[4]
+		else:
+			data["as_above"]="T"
+		addr=addresses[0]
+		data["resunit/num"]=pos[0]
+		data["resstreet"]=pos[1]
+		data["ressuburb"]=pos[2]
+		data["resstate"]=pos[3]
+		data["respostcode"]=pos[4]
+
+
 urls = [
 	('/', index)
+	('/ttcc.pdf',pdf)
 	]
 
 if __name__ == "__main__":
-	app=webapp2.WSGIApplication(urls,debug=True)
+	app=webapp2.WSGIApplication(urls)
 	httpserver.serve(app, host='0.0.0.0', port='8080')
