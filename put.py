@@ -21,13 +21,14 @@ def proof(*args,**kwargs):
 </head>
 <body>
 	<div class="jumbotron"><div class="container text-center">
+	<p>This student is...</p>
 	<h1>TTCC """
 	if kwargs["eligible"]:
 		x+="Eligible"
 	else:
 		x+="Ineligible"
 	x+="""</h1>
-	<div>
+	<div class="text-left">
 	<dl>
 	<dt>Student Name</dt>
 	<dd>"""+kwargs["studentname"]+"""</dd>
@@ -36,7 +37,7 @@ def proof(*args,**kwargs):
 	<dt>Enrollment Status</dt>
 	<dd>"""+kwargs["enrollment"]+"""
 	</dl></div>
-	<div>
+	<div class="text-left">
 	<table>
 	<thead>
 		<td>Course Code</td>

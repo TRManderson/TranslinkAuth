@@ -20,7 +20,11 @@ class index(webapp2.RequestHandler):
 		f.write(str(ttlist)+"\n")
 		courseList=[]
 		for i in cl:
-			courseList+=[Course(code=i[0],title=i[1],hours=ttlist[i[1]])]
+			try:
+				hours=ttlist[i[1]]
+			except KeyError:
+				hours=0
+			courseList+=[Course(code=i[0],title=i[1],hours=hours)]
 		if parseStudyLoad(pullStudyLoad(browser)) =="F":
 			enrollment="Full Time"
 		else:
