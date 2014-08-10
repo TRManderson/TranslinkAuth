@@ -8,15 +8,18 @@ from paste import httpserver
 
 class index(webapp2.RequestHandler):
 	def get(self):
-		self.response.write(landing(title="TransAuth",extra=""))
+		self.response.write(landing(title="TransAuth",extra="",usr="",incorrect=False))
+
+
 	def post(self):
 		postVars=self.request.POST
+		browser=auth(postVars["username"],postVars["password"])
 		try:
-			browser=auth(postVars["username"],postVars["password"])
+			studentname,studentno=parseMyPage(pullMyPage(browser))
 		except Exception as e:
-			self.response.write(landing(title="TransAuth",extra="Invalid username or password"))
+			errorMessage="<p class=\"text-danger\">Invalid username or password</p>"
+			self.response.write(landing(title="TransAuth",extra=errorMessage,usr=postVars["username"],incorrect=True))
 			return
-		studentname,studentno=parseMyPage(pullMyPage(browser))
 		ttlist=parseTimetable(pullTimetable(browser))
 		cl=parseCourseList(pullCourses(browser))
 		Course = namedtuple("Course",["code","title","hours"])
@@ -45,4 +48,4 @@ urls = [
 
 if __name__ == "__main__":
 	app=webapp2.WSGIApplication(urls,debug=True)
-	httpserver.serve(app, host='127.0.0.1', port='8080')
+	httpserver.serve(app, host='0.0.0.0', port='8080')

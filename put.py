@@ -38,7 +38,7 @@ def proof(*args,**kwargs):
 	<dd>"""+kwargs["enrollment"]+"""
 	</dl></div>
 	<div class="text-left">
-	<table>
+	<table class="table">
 	<thead>
 		<td>Course Code</td>
 		<td>Course Title</td>
@@ -62,7 +62,7 @@ def proof(*args,**kwargs):
 
 
 def landing(*args, **kwargs):
-	return """<!DOCTYPE html>
+	x="""<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -88,9 +88,12 @@ def landing(*args, **kwargs):
 
 	<form role="form" method="POST" action="/">
 		<div class="form-grounp">
-		<input type="text" name="username" placeholder="Username" />
+		<input type="text" name="username" placeholder="Username" value=\""""+kwargs["usr"]+"""\"/>
 		</div>
-		<div class="form-grounp">
+		<div class="form-grounp """
+	if kwargs["incorrect"]:
+		x+="has-warning"
+	x+="""\">
 		<input type="password" name="password" placeholder="Password" />
 		</div>
 		<div class="form-grounp">
@@ -107,3 +110,4 @@ def landing(*args, **kwargs):
 </body>
 </html>
 """
+	return x
