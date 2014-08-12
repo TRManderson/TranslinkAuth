@@ -23,8 +23,6 @@ class index(webapp2.RequestHandler):
 		ttlist=parseTimetable(pullTimetable(browser))
 		cl=parseCourseList(pullCourses(browser))
 		Course = namedtuple("Course",["code","title","hours"])
-		f=open("debug.log","a+")
-		f.write(str(ttlist)+"\n")
 		courseList=[]
 		for i in cl:
 			try:
