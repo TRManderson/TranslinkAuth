@@ -4,22 +4,18 @@
 	<p>Prove to Translink you're a full time student
 	and get a filled-out TTCC application if you've been lazy so far!</p>
 
-	<form role="form" method="POST" action="/">
+	<form role="form" method="POST" action="${suburl}">
 		<div class="form-group">
 		<input type="text" name="username" placeholder="Username" value="${usr}"/>
 		</div>
-		<div class="form-group
-	% if incorrect:
-		has-warning
-	% endif
-	">
+		<div class="form-group ${{True:"has-warning",False:""}[incorrect]}">
 		<input type="password" name="password" placeholder="Password" />
 		</div>
 		<div class="form-group">
-		<input type="submit" onClick="this.form.action='./';this.form.submit()" class="btn btn-default" name="btn" value="Prove Yourself!" />
+		<input type="submit" onClick="this.form.action='${suburl}';this.form.submit()" class="btn btn-default" name="btn" value="Prove Yourself!" />
 		</div>
 		<div class="form-group">
-		<input type="button" onClick="this.form.action='./ttcc.pdf';this.form.submit()" class="btn btn-default" name="btn" value="Get a TTCC Form" />
+		<input type="button" onClick="this.form.action='${suburl}/ttcc.pdf';this.form.submit()" class="btn btn-default" name="btn" value="Get a TTCC Form" />
 		</div>
 	</form>
 	${extra}

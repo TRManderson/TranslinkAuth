@@ -13,8 +13,7 @@ def auth(username,password):
 	browser.form["pf.username"]=username
 	browser.form["pf.pass"]=password
 	browser.submit()
-	browser.open(infoURL)
-	return browser.response().read()
+	return browser
 
 def pullClosure(url):
 	def closure(browser):
