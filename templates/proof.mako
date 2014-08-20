@@ -1,5 +1,4 @@
 <%include file="header.mako"/>
-	<div class="jumbotron"><div class="container text-center">
 	<p>This student is...</p>
 	<h1>TTCC
 	% if eligible:
@@ -41,5 +40,4 @@
 	</tr>
 	%endfor
 	</table></div>
-	</div></div>
 <%include file="footer.mako"/>

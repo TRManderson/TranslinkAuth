@@ -114,3 +114,9 @@ def parsePhone(page):
 	soup=BeautifulSoup(page)
 	inputLs=[x for x in soup.find_all("input") if _rightID(x,"UQ_DRV_PERSPHON_")]
 	return inputLs[0]["value"]
+
+def validateUser(username,password):
+	if len(username) !=8:
+		raise ValueError("Username in incorrect format")
+	if len(password) < 6:
+		raise ValueError("Password too short")

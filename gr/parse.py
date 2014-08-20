@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
+from re import match
 
 def _rightProp(x,match, prop):
 	try:
@@ -70,3 +71,9 @@ def parseTimetable(page):
 		ft=False
 	return (tuples,ft)
 
+def validateUser(username,password):
+	if len(username) != 7:
+		raise ValueError
+	if len(password) < 6:
+		raise ValueError
+	return

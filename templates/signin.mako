@@ -1,9 +1,7 @@
 <%include file="header.mako"/>
-<div class="jumbotron"><div class="container text-center">
-	<h1>Translink Auth</h1>
-	<p>Prove to Translink you're a full time student
-	and get a filled-out TTCC application if you've been lazy so far!</p>
-
+	<h1>No TTCC.</h1>
+	<p>Fill out your login details, click a button, and wait patiently. You know how slow logging in is for you, it's just as slow for another computer.</p>
+	${extradetails}
 	<form role="form" method="POST" action="${suburl}">
 		<div class="form-group">
 		<input type="text" name="username" placeholder="Username" value="${usr}"/>
