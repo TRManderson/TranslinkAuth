@@ -52,9 +52,9 @@ def fillPdf(kwargs):
 		pdfData["Text15"]=kwargs["phone"]
 		pdfData["Text16"]=kwargs["email"]
 		now=datetime.now()
-		pdfData["Text17"]=now.strftime("%d")
-		pdfData["Text18"]=now.strftime("%m")
-		pdfData["Text19"]=now.strftime("%y")
+		pdfData["Text17"]=now.day
+		pdfData["Text18"]=now.month
+		pdfData["Text19"]=now.year
 	except Exception:
 		pass
 	newfile=pypdftk.fill_form("./new.pdf",pdfData)
@@ -118,7 +118,7 @@ class uqPdf(webapp2.RequestHandler):
 	def post(self):
 		data={}
 		postVars=self.request.POST
-		browser=uq.pull.pullauth(postVars["username"],postVars["password"])
+		browser=uq.pull.auth(postVars["username"],postVars["password"])
 		data["university"]="University of Queensland"
 		try:
 			x=uq.parse.parseMyPage(uq.pull.pullMyPage(browser))
@@ -265,7 +265,6 @@ class qutReqHandler(webapp2.RequestHandler):
 		data["studentname"]=name
 		data["studentno"]=postVars["username"][1:]
 		ttData=qut.parse.parseTimetable(qut.pull.pullTimetable(browser))
-		print ttData
 		if qut.parse.parseEnrollment(qut.pull.pullEnrollment(browser)):
 			data["enrollment"]="Full Time"
 		else:
@@ -284,13 +283,13 @@ class qutPdf(webapp2.RequestHandler):
 		return self.redirect(self.suburl)
 
 	def post(self):
-		data={}
 		postVars=self.request.POST
 		try:
 			qut.parse.validateUser(postVars["username"],postVars["password"])
 			browser=qut.pull.auth(postVars["username"],postVars["password"])
 			name=qut.parse.parseMainPage(qut.pull.pullMainPage(browser))
 		except (Exception, ValueError) as e:
+			data={}
 			data["title"]="QUT | No TTCC?"
 			data["suburl"]=self.suburl
 			data["extradetails"]=""
@@ -304,10 +303,11 @@ class qutPdf(webapp2.RequestHandler):
 			data["incorrect"]=True
 			self.response.write(signin.render(**data))
 			return
+		name=name.replace(" - ","-")
+		data=qut.parse.parseInfo(qut.pull.pullInformation(browser))
 		data["surname"]=name.split()[-1]
-		data["givennames"]=name.split()[:-1]
-		for k,v in qut.parse.parseInfo(qut.pull.pullInformation(browser)).iteritems():
-			data[k]=v
+		data["studentno"]=postVars["username"][1:]
+		data["givennames"]=" ".join(name.split()[:-1])
 		data["university"]="Queensland University of Technology"
 		self.response.headers['Content-Type'] = 'application/pdf'
 		self.response.headers['Content-Disposition'] = "attachment;filename=ttcc.pdf"
