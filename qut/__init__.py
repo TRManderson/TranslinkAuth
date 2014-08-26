@@ -37,6 +37,7 @@ class ReqHandler(webapp2.RequestHandler):
 				
 			data["incorrect"]=True
 			self.response.write(signin.render(**data))
+			print "Error "+str(e)
 			return
 		data["studentname"]=name
 		data["studentno"]=postVars["username"][1:]
@@ -75,6 +76,7 @@ class Pdf(webapp2.RequestHandler):
 				data["extra"]="<p class=\"text-danger\">Invalid username or password</p>"
 			data["incorrect"]=True
 			self.response.write(signin.render(**data))
+			print "Error "+str(e)
 			return
 		name=name.replace(" - ","-")
 		data=parse.parseInfo(pull.pullInformation(browser))

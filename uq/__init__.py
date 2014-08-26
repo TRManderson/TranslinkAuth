@@ -36,6 +36,7 @@ class ReqHandler(webapp2.RequestHandler):
 				
 			data["incorrect"]=True
 			self.response.write(signin.render(**data))
+			print "Error "+str(e)
 			return
 		ttlist=parse.parseTimetable(pull.pullTimetable(browser))
 		cl=parse.parseCourseList(pull.pullCourses(browser))
@@ -85,6 +86,7 @@ class Pdf(webapp2.RequestHandler):
 				data["extra"]="<p class=\"text-danger\">Invalid username or password</p>"
 			data["incorrect"]=True
 			self.response.write(signin.render(**data))
+			print "Error "+str(e)
 			return
 		addresses=parse.parseAddress(pull.pullAddress(browser))
 		if len(addresses)!=1:

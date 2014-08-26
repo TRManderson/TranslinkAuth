@@ -1,4 +1,5 @@
 import webapp2
+from datetime import datetime
 import pypdftk
 from collections import namedtuple
 from mako.template import Template
@@ -49,7 +50,8 @@ def fillPdf(kwargs):
 		pdfData["Text17"]=now.day
 		pdfData["Text18"]=now.month
 		pdfData["Text19"]=now.year
-	except Exception:
+	except Exception as e:
+		print "PdfError "+str(e)
 		pass
 	newfile=pypdftk.fill_form("./new.pdf",pdfData)
 	f=open(newfile,"rb")
