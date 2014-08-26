@@ -27,7 +27,7 @@ class ReqHandler(webapp2.RequestHandler):
 		try:
 			parse.validateUser(postVars["username"],postVars["password"])
 			browser=pull.auth(postVars["username"],postVars["password"])
-			for k,v in parse.parseEnrollment(pull.pullEnrollment(browser)).iteritems:
+			for k,v in parse.parseEnrollment(pull.pullEnrollment(browser)).iteritems():
 				data[k]=v
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
@@ -40,7 +40,6 @@ class ReqHandler(webapp2.RequestHandler):
 			self.response.write(signin.render(**data))
 			print "Error "+str(e)
 			return
-		data["studentname"]=name
 		data["studentno"]=postVars["username"][1:]
 		ttData=parse.parseTimetable(pull.pullTimetable(browser))
 		data["courselist"]=[Course(code=i[0],title=i[1],hours=i[2]) for i in ttData]
@@ -59,7 +58,7 @@ class Pdf(webapp2.RequestHandler):
 		try:
 			parse.validateUser(postVars["username"],postVars["password"])
 			browser=pull.auth(postVars["username"],postVars["password"])
-			name=parse.parseMainPage(pull.pullMainPage(browser))
+			data=parse.parseInfo(pull.pullInformation(browser))
 		except (Exception, ValueError) as e:
 			data={}
 			data["title"]="QUT | No TTCC?"
@@ -75,12 +74,8 @@ class Pdf(webapp2.RequestHandler):
 			self.response.write(signin.render(**data))
 			print "Error "+str(e)
 			return
-		name=name.replace(" - ","-")
-		data=parse.parseInfo(pull.pullInformation(browser))
-		data["surname"]=name.split()[-1]
-		data["studentno"]=postVars["username"][1:]
-		data["givennames"]=" ".join(name.split()[:-1])
 		data["university"]="Queensland University of Technology"
+		data["studentno"]=postVars["username"][1:]
 		self.response.headers['Content-Type'] = 'application/pdf'
 		self.response.headers['Content-Disposition'] = "attachment;filename=ttcc.pdf"
 		self.response.write(fillPdf(data).read())

@@ -62,6 +62,10 @@ def parseInfo(page):
 			phoneTable=x
 		elif _rightProp(x,"ctl00_Content_grdEmails","id"):
 			emailTable=x
+		elif _rightProp(x,"qut-student-name","class"):
+			data["studentname"]=x.find('tbody').find('tr').find('td').contents[0].strip().replace(" - ","-")
+			data["surname"]=data["studentname"].split()[-1]
+			data["givennames"]=" ".join(data["studentname"].split()[:-1])
 		else:
 			continue
 	addrStrs=[_nthGenElem(x.children,3).contents[0] for x in list(_nthGenElem(addrTable.children,2).children)[1:-1]]
@@ -85,8 +89,7 @@ def parseEnrollment(page):
 		if _rightProp(x,"ctl00_Content_grdCurrEnrol",'id'):
 			table=x.find('tbody')
 		if _rightProp(x,"qut-student-name","class"):
-			data["studentname"]=x.find('tbody').find('tr').find('td').contents[0].strip()
-			print name
+			data["studentname"]=x.find('tbody').find('tr').find('td').contents[0].strip().replace(" - ","-")
 	units=0
 	for i in table.contents[1:-1]:
 		units+=int(_nthGenElem(i.children,6).contents[0])
@@ -94,7 +97,7 @@ def parseEnrollment(page):
 		data["enrollment"]="Full Time"
 	else:
 		data["enrollment"]="Part Time"
-	return False
+	return data
 
 def validateUser(username,password):
 	if len(username) < 8:
