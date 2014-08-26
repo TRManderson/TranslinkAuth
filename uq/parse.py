@@ -25,9 +25,21 @@ def _withinDate(startdatestr,enddatestr):
 
 def _detailify(courseElement):
 	spans = courseElement.find_all('span')
-	title=[x for x in spans if _rightID(x,"DESCR$")][0].contents[0]
-	units=[x for x in spans if _rightID(x,"RESULTS$")][0].contents[0]
-	codeDiv=[x for x in courseElement.find_all('div') if _rightID(x, "win4divUQ_DRV_TERM_HTMLAREA5")][0]
+	title=0
+	units=0
+	for x in spans:
+		if _rightID(x,"DESCR$"):
+			title=x.contents[0]
+			if units!=0:
+				break
+		if _rightID(x,"RESULTS$"):
+			units=x.contents[0]
+			if title!=0:
+				break
+	for x in courseElement.find_all('div'):
+		if _rightID(x, "win4divUQ_DRV_TERM_HTMLAREA5"):
+			codeDiv=x
+			break
 	code=re.findall("[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]",str(codeDiv))[0]
 	return (code, title, units)
 
@@ -37,7 +49,7 @@ def parseCourseList(page):
 	semesters=[x for x in rows if _rightID(x,"win4divACTION_NBRGP")]
 	index=[_withinDate(_pullDates(x.contents[0])[0],_pullDates(x.contents[0])[1]) for x in semesters].index(True)
 	rows=soup.find_all('tr')
-	courses=[x for x in rows if _rightID(x, "trACTION_NBR$"+str(index))]
+	courses=[x for x in rows if _rightID(x,"trACTION_NBR$"+str(index))]
 	return [_detailify(x) for x in courses]
 
 
@@ -49,7 +61,7 @@ def _strTimeDiff(start,end):
 def parseTimetable(page):
 	soup=BeautifulSoup(page)
 	rows=soup.find_all('span')
-	courseTitles=[x.contents[0] for x in rows if _rightID(x,"UQ_DRV_TTBLE_HP_DESCR$") and x.contents[0].strip()]
+	courseTitles=[x.contents[0] for x in rows if _rightID(x,"UQ_DRV_TTBLE_HP_DESCR$") and x.contents[0].strip() and x.contents[0].strip() != ""]
 	startTimes=[x.contents[0] for x in rows if _rightID(x,"UQ_DRV_TTBLE_HP_UQ_START_TM$") and x.contents[0].strip() != ""]
 	endTimes=[x.contents[0].strip() for x in rows if _rightID(x,"UQ_DRV_TTBLE_HP_UQ_END_TM$") and x.contents[0].strip() != ""]
 	timeDiffs=map(_strTimeDiff,startTimes,endTimes)
@@ -102,8 +114,11 @@ def _addrBlockToTuple(content):
 
 def parseAddress(page):
 	soup=BeautifulSoup(page)
-	semBlock=[x for x in soup.find_all('div') if _rightID(x,"win0divUQ_DRV_ADDR_UQ_ADDR_SUMM_SEM")][0]
-	posBlock=[x for x in soup.find_all('div') if _rightID(x,"win0divUQ_DRV_ADDR_UQ_ADDR_SUMM_MAIL")][0]
+	for x in soup.find_all('div'):
+		if _rightID(x,"win0divUQ_DRV_ADDR_UQ_ADDR_SUMM_SEM"):
+			semBlock=x
+		if _rightID(x,"win0divUQ_DRV_ADDR_UQ_ADDR_SUMM_MAIL"):
+			posBlock=x
 	sem=_addrBlockToTuple(semBlock)
 	pos=_addrBlockToTuple(posBlock)
 	if sem==pos:

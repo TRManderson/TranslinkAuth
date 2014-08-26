@@ -73,7 +73,7 @@ def parseTimetable(page):
 
 def validateUser(username,password):
 	if len(username) != 7:
-		raise ValueError
+		raise ValueError("Username incorrect length")
 	if len(password) < 6:
-		raise ValueError
+		raise ValueError("Password too short")
 	return

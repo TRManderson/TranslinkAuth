@@ -13,7 +13,9 @@ def _rightProp(x,match, prop):
 
 def parseMainPage(page):
 	soup=BeautifulSoup(page)
-	return [x for x in soup.find_all('h2') if _rightProp(x,"user-greeting","class")][0].contents[1].contents[0]
+	for x in soup.find_all('h2'):
+		if _rightProp(x,"user-greeting","class"):
+			return x.contents[1].contents[0]
 
 def _parseTimeDiff(diffstr):
 	split = diffstr.split("-")
@@ -50,14 +52,25 @@ def _addrStrToParts(addrStr):
 	data["street"]=" ".join([x for x in split if not x.isupper()])
 	return data
 
+def _nthGenElem(generator,n):
+	for i in range(n+1):
+		x=generator.next()
+	return x
+
 def parseInfo(page):
 	soup=BeautifulSoup(page)
 	tables=soup.find_all('table')
 	data={}
-	addrTable =[x for x in tables if _rightProp(x,"ctl00_Content_grdAddresses","id")][0]
-	phoneTable=[x for x in tables if _rightProp(x,"ctl00_Content_grdPhones","id")][0]
-	emailTable=[x for x in tables if _rightProp(x,"ctl00_Content_grdEmails","id")][0]
-	addrStrs=[list(x.children)[3].contents[0] for x in list(list(addrTable.children)[2].children)[1:-1]]
+	for x in tables:
+		if _rightProp(x,"ctl00_Content_grdAddresses","id"):
+			addrTable=x
+		elif _rightProp(x,"ctl00_Content_grdPhones","id"):
+			phoneTable=x
+		elif _rightProp(x,"ctl00_Content_grdEmails","id"):
+			emailTable=x
+		else:
+			continue
+	addrStrs=[_nthGenElem(x.children,3).contents[0] for x in list(_nthGenElem(addrTable.children,2).children)[1:-1]]
 	for k,v in _addrStrToParts(addrStrs[1]).iteritems():
 		data["res"+k]=v
 	if addrStrs[0] == addrStrs[1]:
@@ -66,18 +79,19 @@ def parseInfo(page):
 		for k,v in _addrStrToParts(addrStrs[0]).iteritems():
 			data["post"+k]=v
 		data["postaddress"]=data["postunit/num"]+" "+data["poststreet"]
-	data["phone"]=list(list(list(phoneTable.children)[2].children)[1].children)[3].contents[0]
-	data["email"]=list(list(list(emailTable.children)[2].children)[1].children)[3].contents[1].contents[0]
+	data["phone"]=_nthGenElem(_nthGenElem(_nthGenElem(phoneTable.children,2).children,1).children,3).contents[0]
+	data["email"]=_nthGenElem(_nthGenElem(_nthGenElem(emailTable.children,2).children,1).children,3).contents[1].contents[0]
 	return data
 
 
 def parseEnrollment(page):
 	soup=BeautifulSoup(page)
-	table=[x for x in soup.find_all('table') if _rightProp(x,"ctl00_Content_grdCurrEnrol",'id')][0]
-	table=table.find_all('tbody')[0]
+	for x in soup.find_all('table'):
+		if _rightProp(x,"ctl00_Content_grdCurrEnrol",'id'):
+			table=x.find('tbody')
 	units=0
 	for i in table.contents[1:-1]:
-		units+=int(list(i.children)[6].contents[0])
+		units+=int(_nthGenElem(i.children,6).contents[0])
 	if units>=36:
 		return True
 	return False
