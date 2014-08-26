@@ -1,7 +1,7 @@
 import webapp2
 import uq
-import gr
 import qut
+import gr
 from mako.template import Template
 from mako.lookup import TemplateLookup
 

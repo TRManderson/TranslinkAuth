@@ -2,6 +2,9 @@ import pull
 import parse
 from common import *
 
+background="#240330"
+suburl="/uq"
+
 class ReqHandler(webapp2.RequestHandler):
 	def get(self):
 		data={}
@@ -9,16 +12,16 @@ class ReqHandler(webapp2.RequestHandler):
 		data["extra"]=""
 		data["usr"]=""
 		data["incorrect"]=False
-		data["suburl"]="/uq"
-		data["bgcolor"]="#240330"
+		data["suburl"]=suburl
+		data["bgcolor"]=background
 		data["extradetails"]=""
 		self.response.write(signin.render(**data))
 
 	def post(self):
 		postVars=self.request.POST
 		data={"title":"UQ | No TTCC?"}
-		data["bgcolor"]="#240330"
-		data["suburl"]="/uq"
+		data["bgcolor"]=background
+		data["suburl"]=suburl
 		data["extradetails"]=""
 		try:
 			parse.validateUser(postVars["username"],postVars["password"])

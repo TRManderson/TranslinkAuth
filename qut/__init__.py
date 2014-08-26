@@ -2,26 +2,27 @@ import pull
 import parse
 from common import *
 
+background="#00467f"
+suburl="/qut"
+
 class ReqHandler(webapp2.RequestHandler):
-	background="#00467f"
-	suburl="/qut"
 	def get(self):
 		data={}
 		data["title"]="QUT | No TTCC?"
 		data["extra"]=""
 		data["usr"]=""
-		data["suburl"]=self.suburl
+		data["suburl"]=suburl
 		data["incorrect"]=False
-		data["bgcolor"]=self.background
+		data["bgcolor"]=background
 		data["extradetails"]=""
 		self.response.write(signin.render(**data))
 
 	def post(self):
 		data={}
 		data["title"]="QUT | No TTCC?"
-		data["suburl"]=self.suburl
+		data["suburl"]=suburl
 		data["extradetails"]=""
-		data["bgcolor"]=self.background
+		data["bgcolor"]=background
 		postVars=self.request.POST
 		try:
 			parse.validateUser(postVars["username"],postVars["password"])

@@ -87,7 +87,7 @@ def validateUser(username,password):
 		raise ValueError("Username too short")
 	if len(username) > 9:
 		raise ValueError("Username too long")
-	if username[0] != "n":
+	if username[0] != "n" and username[0] != "N":
 		raise ValueError("Username in incorrect format")
 	else:
 		for digit in username[1:]:

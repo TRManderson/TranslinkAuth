@@ -1,13 +1,10 @@
 import webapp2
-import uq
-import gr
-import qut
 import pypdftk
 from collections import namedtuple
 from mako.template import Template
 from mako.lookup import TemplateLookup
 
-lookup=TemplateLookup(directories=[".","./templates/"])
+lookup=TemplateLookup(directories=[".","..","./templates/","../templates/"])
 signin=Template(filename="templates/signin.mako",lookup=lookup)
 proof=Template(filename="templates/proof.mako",lookup=lookup)
 
