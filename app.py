@@ -118,6 +118,7 @@ class uqPdf(webapp2.RequestHandler):
 	def post(self):
 		data={}
 		postVars=self.request.POST
+		uq.parse.validate(postVars["username"],postVars["password"])
 		browser=uq.pull.auth(postVars["username"],postVars["password"])
 		data["university"]="University of Queensland"
 		try:
@@ -129,7 +130,7 @@ class uqPdf(webapp2.RequestHandler):
 			data["title"]=x[2]
 		except Exception as e:
 			errorMessage="<p class=\"text-danger\">Invalid username or password</p>"
-			self.response.write(landing(title="TransAuth",extra=errorMessage,usr=postVars["username"],incorrect=True))
+			self.response.write(landing.render(title="TransAuth",extra=errorMessage,usr=postVars["username"],incorrect=True))
 			return
 		addresses=uq.parse.parseAddress(uq.pull.pullAddress(browser))
 		if len(addresses)!=1:
@@ -334,6 +335,4 @@ urls = [
 	('/gr/ttcc.pdf',grPdf),
 	]
 
-if __name__ == "__main__":
-	app=webapp2.WSGIApplication(urls,debug=True)
-	httpserver.serve(app, host='0.0.0.0', port='8080')
+app=webapp2.WSGIApplication(urls,debug=True)
