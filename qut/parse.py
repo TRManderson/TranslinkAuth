@@ -83,4 +83,16 @@ def parseEnrollment(page):
 	return False
 
 def validateUser(username,password):
+	if len(username) < 8:
+		raise ValueError("Username too short")
+	if len(username) > 9:
+		raise ValueError("Username too long")
+	if username[0] != "n":
+		raise ValueError("Username in incorrect format")
+	else:
+		for digit in username[1:]:
+			if not (digit.isdigit()):
+				raise ValueError("Username in incorrect format")
+	if len(password) <6:
+		raise ValueError("Password too short")
 	return

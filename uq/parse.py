@@ -117,6 +117,12 @@ def parsePhone(page):
 
 def validateUser(username,password):
 	if len(username) !=8:
-		raise ValueError("Username in incorrect format")
+		raise ValueError("Username is incorrect length")
+	if username[0] !="s":
+		raise ValueError("Username is in incorrect format")
+	else:
+		for i in username[1:]:
+			if not i.isdigit():
+				raise ValueError("Username is in incorrect format")
 	if len(password) < 6:
 		raise ValueError("Password too short")
