@@ -11,12 +11,6 @@ def _rightProp(x,match, prop):
 	else:
 		return xID.startswith(match)
 
-def parseMainPage(page):
-	soup=BeautifulSoup(page)
-	for x in soup.find_all('h2'):
-		if _rightProp(x,"user-greeting","class"):
-			return x.contents[1].contents[0]
-
 def _parseTimeDiff(diffstr):
 	split = diffstr.split("-")
 	start=datetime.strptime(split[0],"%I:%M%p")
@@ -86,14 +80,20 @@ def parseInfo(page):
 
 def parseEnrollment(page):
 	soup=BeautifulSoup(page)
+	data={}
 	for x in soup.find_all('table'):
 		if _rightProp(x,"ctl00_Content_grdCurrEnrol",'id'):
 			table=x.find('tbody')
+		if _rightProp(x,"qut-student-name","class"):
+			data["studentname"]=x.find('tbody').find('tr').find('td').contents[0].strip()
+			print name
 	units=0
 	for i in table.contents[1:-1]:
 		units+=int(_nthGenElem(i.children,6).contents[0])
 	if units>=36:
-		return True
+		data["enrollment"]="Full Time"
+	else:
+		data["enrollment"]="Part Time"
 	return False
 
 def validateUser(username,password):

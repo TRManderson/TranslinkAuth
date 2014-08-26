@@ -27,7 +27,8 @@ class ReqHandler(webapp2.RequestHandler):
 		try:
 			parse.validateUser(postVars["username"],postVars["password"])
 			browser=pull.auth(postVars["username"],postVars["password"])
-			name=parse.parseMainPage(pull.pullMainPage(browser))
+			for k,v in parse.parseEnrollment(pull.pullEnrollment(browser)).iteritems:
+				data[k]=v
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
@@ -42,10 +43,6 @@ class ReqHandler(webapp2.RequestHandler):
 		data["studentname"]=name
 		data["studentno"]=postVars["username"][1:]
 		ttData=parse.parseTimetable(pull.pullTimetable(browser))
-		if parse.parseEnrollment(pull.pullEnrollment(browser)):
-			data["enrollment"]="Full Time"
-		else:
-			data["enrollment"]="Part Time"
 		data["courselist"]=[Course(code=i[0],title=i[1],hours=i[2]) for i in ttData]
 		if data["enrollment"]=="Full Time" or sum(map(lambda x: x.hours,data["courselist"])) >=12:
 			data["eligible"]=True
