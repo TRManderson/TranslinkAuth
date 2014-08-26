@@ -118,10 +118,11 @@ class uqPdf(webapp2.RequestHandler):
 	def post(self):
 		data={}
 		postVars=self.request.POST
-		uq.parse.validate(postVars["username"],postVars["password"])
-		browser=uq.pull.auth(postVars["username"],postVars["password"])
 		data["university"]="University of Queensland"
 		try:
+			uq.parse.validate(postVars["username"],postVars["password"])
+			browser=uq.pull.auth(postVars["username"],postVars["password"])
+
 			x=uq.parse.parseMyPage(uq.pull.pullMyPage(browser))
 			fullname=x[0]
 			data["surname"]=fullname.split(" ")[-1]
@@ -174,10 +175,10 @@ class grReqHandler(webapp2.RequestHandler):
 		data["extradetails"]=""
 		data["bgcolor"]="#D00"
 		postVars=self.request.POST
-		browser=gr.pull.auth(postVars["username"],postVars["password"])
 		try:
-			name=gr.parseMainPage(browser.response().read())
 			gr.parse.validateUser(username,password)
+			browser=gr.pull.auth(postVars["username"],postVars["password"])
+			name=gr.parseMainPage(browser.response().read())
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
@@ -208,8 +209,8 @@ class grPdf(webapp2.RequestHandler):
 		postVars=self.request.POST
 		data={}
 		try:
-			name=gr.parseMainPage(browser.response().read())
 			gr.parse.validateUser(username,password)
+			name=gr.parseMainPage(browser.response().read())
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
@@ -323,6 +324,12 @@ class about(webapp2.RequestHandler):
 	def get(self):
 		self.response.write(aboutpage.render(title="About No TTCC?",bgcolor="#68a427"))
 
+class favicon(webapp2.RequestHandler):
+	def get(self):
+		f=open('favicon.ico','rb')
+		self.response.headers['Content-Type'] ="image/x-icon"
+		self.response.write(f.read())
+		f.close()
 
 urls = [
 	('/', index),
@@ -333,6 +340,7 @@ urls = [
 	('/qut/ttcc.pdf',qutPdf),
 	('/uq/ttcc.pdf',uqPdf),
 	('/gr/ttcc.pdf',grPdf),
+	('/favicon.ico',favicon)
 	]
 
 app=webapp2.WSGIApplication(urls,debug=True)
