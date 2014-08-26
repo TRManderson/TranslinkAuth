@@ -53,8 +53,6 @@ class ReqHandler(webapp2.RequestHandler):
 		self.response.write(proof.render(**data))
 
 class Pdf(webapp2.RequestHandler):
-	suburl="/qut"
-	background="#00467f"
 	def get(self):
 		return self.redirect(self.suburl)
 
@@ -67,15 +65,14 @@ class Pdf(webapp2.RequestHandler):
 		except (Exception, ValueError) as e:
 			data={}
 			data["title"]="QUT | No TTCC?"
-			data["suburl"]=self.suburl
+			data["suburl"]=suburl
 			data["extradetails"]=""
-			data["bgcolor"]=self.background
+			data["bgcolor"]=background
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
 				data["extra"]="<p class=\"text-danger\">"+str(e)+"</p>"
 			else:
 				data["extra"]="<p class=\"text-danger\">Invalid username or password</p>"
-				
 			data["incorrect"]=True
 			self.response.write(signin.render(**data))
 			return

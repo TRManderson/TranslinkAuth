@@ -73,8 +73,18 @@ class Pdf(webapp2.RequestHandler):
 			data["studentno"]=x[1]
 			data["title"]=x[2]
 		except Exception as e:
-			errorMessage="<p class=\"text-danger\">Invalid username or password</p>"
-			self.response.write(landing.render(title="TransAuth",extra=errorMessage,usr=postVars["username"],incorrect=True))
+			data={}
+			data["title"]="UQ | No TTCC?"
+			data["suburl"]=suburl
+			data["extradetails"]=""
+			data["bgcolor"]=background
+			data["usr"]=postVars["username"]
+			if type(e)==ValueError:
+				data["extra"]="<p class=\"text-danger\">"+str(e)+"</p>"
+			else:
+				data["extra"]="<p class=\"text-danger\">Invalid username or password</p>"
+			data["incorrect"]=True
+			self.response.write(signin.render(**data))
 			return
 		addresses=parse.parseAddress(pull.pullAddress(browser))
 		if len(addresses)!=1:
