@@ -24,16 +24,26 @@ class favicon(webapp2.RequestHandler):
 		self.response.write(f.read())
 		f.close()
 
+class loading(webapp2.RequestHandler):
+	def get(self):
+		f=open('loading.gif','rb')
+		self.response.headers['Content-Type'] ="image/gif"
+		self.response.headers['Cache-Control']="max-age=31536000;"
+		self.response.write(f.read())
+		f.close()
+
+
 urls = [
 	('/', index),
 	('/about', about),
 	('/uq',uq.ReqHandler),
 	('/gr',gr.ReqHandler),
 	('/qut',qut.ReqHandler),
-	('/qut/ttcc.pdf',qut.Pdf),
+	('/qut/ttcc.pdf',qut.Pdf),	
 	('/uq/ttcc.pdf',uq.Pdf),
 	('/gr/ttcc.pdf',gr.Pdf),
-	('/favicon.ico',favicon)
+	('/favicon.ico',favicon),
+	('/loading.gif',loading),
 	]
 
 app=webapp2.WSGIApplication(urls,debug=True)
