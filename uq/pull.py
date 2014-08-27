@@ -1,3 +1,4 @@
+from common import pullClosure
 import mechanize
 
 def auth(username,password):
@@ -13,11 +14,6 @@ def auth(username,password):
 	browser.submit()
 	return browser
 
-def pullClosure(url):
-	def closure(browser):
-		browser.open(url)
-		return browser.response().read()
-	return closure
 
 pullMyPage=pullClosure("https://www.sinet.uq.edu.au/psp/ps/EMPLOYEE/HRMS/h/?tab=UQ_MYPAGE")
 pullCourses=pullClosure("https://www.sinet.uq.edu.au/psc/ps_4/EMPLOYEE/HRMS/c/UQMY_STUDENT.UQMY_CRSE_HOME.GBL")

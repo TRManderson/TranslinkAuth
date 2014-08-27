@@ -26,11 +26,7 @@ def auth(username,password):
 	browser.submit()
 	return browser
 
-def pullClosure(url):
-	def closure(browser):
-		browser.open(url)
-		return browser.response().read()
-	return closure
+from common import pullClosure
 
 pullTimetable	= pullClosure("https://qutvirtual4.qut.edu.au/group/student/study")
 pullEnrollment	= pullClosure("https://estudent.qut.edu.au/eStudent/SM/EnrDtls10.aspx?r=QUT.ESTU.NOCAR.ROLE&f=%24S1.EST.ENRDTLS.WEB")

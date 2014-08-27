@@ -56,3 +56,9 @@ def fillPdf(kwargs):
 	newfile=pypdftk.fill_form("./new.pdf",pdfData)
 	f=open(newfile,"rb")
 	return f
+
+def pullClosure(url):
+	def closure(browser):
+		browser.open(url)
+		return browser.response().read()
+	return closure

@@ -15,12 +15,7 @@ def auth(username,password):
 	browser.submit()
 	return browser
 
-def pullClosure(url):
-	def closure(browser):
-		browser.open(url)
-		return browser.response().read()
-	return closure
-
+from common import pullClosure
 from parse import _rightProp,BeautifulSoup
 
 def pullTimetable(browser):
