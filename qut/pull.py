@@ -1,11 +1,5 @@
 from mechanize import Browser
 
-def writeOut(x):
-	f=open('out.html',"w+")
-	f.write(x)
-	f.close
-	return x
-
 def auth(username,password):
 	browser=Browser()
 	browser.set_handle_robots(False)

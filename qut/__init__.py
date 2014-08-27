@@ -51,7 +51,7 @@ class ReqHandler(webapp2.RequestHandler):
 
 class Pdf(webapp2.RequestHandler):
 	def get(self):
-		return self.redirect(self.suburl)
+		return self.redirect(suburl)
 
 	def post(self):
 		postVars=self.request.POST
