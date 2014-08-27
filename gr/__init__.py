@@ -2,29 +2,35 @@ import parse
 import pull
 from common import *
 
+background="#D00"
+suburl="/gr"
+
 class ReqHandler(webapp2.RequestHandler):
 	def get(self):
 		data={}
 		data["title"]="Griffith | No TTCC?"
 		data["extra"]=""
 		data["usr"]=""
-		data["suburl"]="/gr"
+		data["suburl"]=suburl
 		data["incorrect"]=False
-		data["bgcolor"]="#D00"
+		data["bgcolor"]=background
 		data["extradetails"]=""
 		self.response.write(signin.render(**data))
 
 	def post(self):
 		data={}
 		data["title"]="Griffith | No TTCC?"
-		data["suburl"]="/gr"
+		data["extra"]=""
+		data["usr"]=""
+		data["suburl"]=suburl
+		data["incorrect"]=False
+		data["bgcolor"]=background
 		data["extradetails"]=""
-		data["bgcolor"]="#D00"
 		postVars=self.request.POST
 		try:
-			parse.validateUser(username,password)
+			parse.validateUser(postVars["username"],postVars["password"])
 			browser=pull.auth(postVars["username"],postVars["password"])
-			name=gr.parseMainPage(browser.response().read())
+			name=parse.parseMainPage(browser.response().read())
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
@@ -33,6 +39,7 @@ class ReqHandler(webapp2.RequestHandler):
 				data["extra"]="<p class=\"text-danger\">Invalid username or password</p>"
 				
 			data["incorrect"]=True
+			print "Error "+str(e)
 			self.response.write(signin.render(**data))
 			return
 		data["studentname"]=name
@@ -54,9 +61,17 @@ class Pdf(webapp2.RequestHandler):
 	def post(self):
 		postVars=self.request.POST
 		data={}
+		data["title"]="Griffith | No TTCC?"
+		data["extra"]=""
+		data["usr"]=""
+		data["suburl"]=suburl
+		data["incorrect"]=False
+		data["bgcolor"]=background
+		data["extradetails"]=""
 		try:
-			parse.validateUser(username,password)
-			name=gr.parseMainPage(browser.response().read())
+			parse.validateUser(postVars["username"],postVars["password"])
+			browser=pull.auth(postVars["username"],postVars["password"])
+			name=parse.parseMainPage(browser.response().read())
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
@@ -65,11 +80,14 @@ class Pdf(webapp2.RequestHandler):
 				data["extra"]="<p class=\"text-danger\">Invalid username or password</p>"
 				
 			data["incorrect"]=True
+			print "Error "+str(e)
 			self.response.write(signin.render(**data))
 			return
-		browser=pull.auth(postVars["username"],postVars["password"])
 		data=parse.parseInfo(pull.pullInformation(browser))
 		data["university"]="Griffith University"
+		data["surname"]=name.split()[-1]
+		data["givennames"]=" ".join(name.split()[:-1])
+		data["studentno"]=postVars["username"][1:]
 		self.response.headers['Content-Type'] = 'application/pdf'
 		self.response.headers['Content-Disposition'] = "attachment;filename=ttcc.pdf"
 		self.response.write(fillPdf(data).read())

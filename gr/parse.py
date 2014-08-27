@@ -51,17 +51,19 @@ def parseInfo(page):
 
 
 def _parseTimeDiff(diffstr):
-	split = " ".join(diffstr.contents[0].strip().split(" ")[1:]).split(" - ")
+	split = diffstr.split(" - ")
 	start=datetime.strptime(split[0],"%I:%M%p")
 	end=datetime.strptime(split[1],"%I:%M%p")
 	return int(round((end-start).seconds/60 /60.0))
 
 def _ttDetailsFromDiv(divBlock):
 	tcsplit=divBlock.find_all("td")[0].contents[0].split(" - ")
-	hours=sum([_parseTimeDiff(x) for x in divBlock.find_all("span") if _rightProp(x,"MTG_SCHED$","id")])
+	stuff=set([" ".join(x.contents[0].strip().split(" ")[1:]) for x in divBlock.find_all("span") if _rightProp(x,"MTG_SCHED$","id")])
+	hours=sum(map(lambda x:_parseTimeDiff(x),stuff))
 	return(tcsplit[0].strip(), " ".join(tcsplit[1:]).strip(), hours)
 
 def parseTimetable(page):
+	from pull import writeOut
 	soup=BeautifulSoup(page)
 	tuples=[_ttDetailsFromDiv(x) for x in soup.find_all("div") if _rightProp(x,"win0divDERIVED_REGFRM1_DESCR20","id")]
 	eqLoad=float([x for x in soup.find_all('span') if _rightProp(x,"DERIVED_SR_SSR_TOT_EFTSU_LD","id")][0].contents[0].strip())
@@ -72,7 +74,7 @@ def parseTimetable(page):
 	return (tuples,ft)
 
 def validateUser(username,password):
-	if len(username) != 7:
+	if len(username) != 8:
 		raise ValueError("Username incorrect length")
 	if len(password) < 6:
 		raise ValueError("Password too short")

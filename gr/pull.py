@@ -21,5 +21,19 @@ def pullClosure(url):
 		return browser.response().read()
 	return closure
 
-pullTimetable=pullClosure("https://ps-he.secure.griffith.edu.au/psc/HE90PD/GUINTRA/HE/c/SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL")
+from parse import _rightProp,BeautifulSoup
+
+def pullTimetable(browser):
+	soup=BeautifulSoup(pullClosure("https://ps-he.secure.griffith.edu.au/psc/HE90PD/GUINTRA/HE/c/SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL")(browser))
+	inputs=[]
+	if browser.geturl() != "https://ps-he.secure.griffith.edu.au/psc/HE90PD/GUINTRA/HE/c/SA_LEARNER_SERVICES.SSR_SSENRL_LIST.GBL":
+		for x in soup.find_all('input'):
+			if _rightProp(x,"SSR_DUMMY_RECV1$sels$0","name"):
+				inputs+=[x]
+		browser.select_form("win0")
+		browser.form["SSR_DUMMY_RECV1$sels$0"]=len(inputs)-1
+		browser.submit()
+	return browser.response().read()
+
+
 pullInformation=pullClosure("https://ps-he.secure.griffith.edu.au/psc/HE90PD/GUINTRA/HE/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL")

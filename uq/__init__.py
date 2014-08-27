@@ -64,7 +64,7 @@ class Pdf(webapp2.RequestHandler):
 		postVars=self.request.POST
 		data["university"]="University of Queensland"
 		try:
-			parse.validate(postVars["username"],postVars["password"])
+			parse.validateUser(postVars["username"],postVars["password"])
 			browser=pull.auth(postVars["username"],postVars["password"])
 
 			x=parse.parseMyPage(pull.pullMyPage(browser))
