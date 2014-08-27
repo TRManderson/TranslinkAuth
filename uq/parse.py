@@ -134,7 +134,7 @@ def validateUser(username,password):
 	if len(username) !=8:
 		print username
 		raise ValueError("Username is incorrect length")
-	if username[0] !="s":
+	if username[0] !="s" and username[0] !="S":
 		print username
 		raise ValueError("Username is in incorrect format")
 	else:
