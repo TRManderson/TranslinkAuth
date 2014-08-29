@@ -63,7 +63,6 @@ def _ttDetailsFromDiv(divBlock):
 	return(tcsplit[0].strip(), " ".join(tcsplit[1:]).strip(), hours)
 
 def parseTimetable(page):
-	from pull import writeOut
 	soup=BeautifulSoup(page)
 	tuples=[_ttDetailsFromDiv(x) for x in soup.find_all("div") if _rightProp(x,"win0divDERIVED_REGFRM1_DESCR20","id")]
 	eqLoad=float([x for x in soup.find_all('span') if _rightProp(x,"DERIVED_SR_SSR_TOT_EFTSU_LD","id")][0].contents[0].strip())
