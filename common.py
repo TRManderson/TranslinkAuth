@@ -62,3 +62,9 @@ def pullClosure(url):
 		browser.open(url)
 		return browser.response().read()
 	return closure
+
+
+def writeOut(page):
+	f=open("out.html","w+")
+	f.write(page)
+	f.close()
