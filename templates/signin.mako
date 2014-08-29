@@ -14,7 +14,7 @@ function loading(){document.getElementById('loading').style.display="block"}
 		<input type="password" name="password" placeholder="Password" />
 		</div>
 		<div class="form-group">
-		<input type="submit" onClick="this.form.action='${suburl}';this.form.submit();" class="btn btn-default" name="btn" value="Prove Yourself!" />
+		<input type="submit" onClick="this.form.action='${suburl}';this.form.submit();" class="btn btn-default" name="btn" value="Prove TTCC Eligibility" />
 		</div>
 		<div class="form-group">
 		<input type="button" onClick="this.form.action='${suburl}/ttcc.pdf';this.form.submit();" class="btn btn-default" name="btn" value="Get a TTCC Form" />
