@@ -36,7 +36,7 @@
 			<ul class="nav navbar-nav navbar-right">
 			<li><a href="/uq">UQ</a></li>
 			<li><a href="/qut">QUT</a></li>
-			<li><a href="/gr">Griffith</a></li>
+			<li><a href="/gr/warn">Griffith</a></li>
 			</ul>
 		</div>
 	</div>

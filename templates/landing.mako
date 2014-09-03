@@ -6,7 +6,7 @@
 <div class="btn-group btn-group-lg">
 	<a href="/uq" type="button" class="btn btn-default">UQ</a>
 	<a href="/qut" type="button" class="btn btn-default">QUT</a>
-	<a href="/gr" type="button" class="btn btn-default">Griffith</a>
+	<a href="/gr/warn" type="button" class="btn btn-default">Griffith</a>
 </div>
 <p></p>
 <p>Send any and all errors to <a href="mailto:trmanderson&#64;gmail&#46;com">trmanderson&#64;&#103;mail&#46;com</a>. If you want to support the creator of this app, click the "Donate" button below.</p>
