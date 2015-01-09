@@ -9,7 +9,7 @@
 	<a href="/gr/warn" type="button" class="btn btn-default">Griffith</a>
 </div>
 <p></p>
-<p>Send any and all errors to <a href="mailto:trmanderson&#64;gmail&#46;com">trmanderson&#64;&#103;mail&#46;com</a>. If you want to support the creator of this app, click the "Donate" button below.</p>
+<p>Send any and all errors to <a href="mailto:me&#64;trm&#46;io">me&#64;trm&#46;io</a>. If you want to support the creator of this app, click the "Donate" button below. I take no responsibility for your university getting grumpy and you do so at your own risk.</p>
 <div>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
