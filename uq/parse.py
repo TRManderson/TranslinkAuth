@@ -40,7 +40,16 @@ def _detailify(courseElement):
 		if _rightID(x, "win4divUQ_DRV_TERM_HTMLAREA5"):
 			codeDiv=x
 			break
-	code=re.findall("[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]",str(codeDiv))[0]
+	f=open("temp.out","a+")
+	f.write(str(codeDiv)+"\n\n\n")
+	f.close()
+	try:
+		code=re.findall("[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]",str(codeDiv))[0]
+	except IndexError as e:
+		if "No Enrolments Exist" in str(codeDiv):
+			return None
+		else:
+			raise
 	return (code, title, units)
 
 def parseCourseList(page):
@@ -50,7 +59,7 @@ def parseCourseList(page):
 	index=[_withinDate(_pullDates(x.contents[0])[0],_pullDates(x.contents[0])[1]) for x in semesters].index(True)
 	rows=soup.find_all('tr')
 	courses=[x for x in rows if _rightID(x,"trACTION_NBR$"+str(index))]
-	return [_detailify(x) for x in courses]
+	return filter(lambda x:x!=None, [_detailify(x) for x in courses])
 
 
 def _strTimeDiff(start,end):

@@ -25,6 +25,7 @@
 	<dt>Enrollment Status</dt>
 	<dd>${enrollment}</dd>
 	</dl></div>
+	% if len(courselist):
 	<div class="text-left">
 	<table class="table">
 	<thead>
@@ -39,5 +40,10 @@
 		<td>${course.hours}</td>
 	</tr>
 	%endfor
-	</table></div>
+	</table>
+	% else:
+	<div>
+	<p>Not currently enrolled in any courses</p>
+	% endif
+	</div>
 <%include file="footer.mako"/>
