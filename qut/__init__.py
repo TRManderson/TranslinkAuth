@@ -27,8 +27,6 @@ class ReqHandler(webapp2.RequestHandler):
 		try:
 			parse.validateUser(postVars["username"],postVars["password"])
 			browser=pull.auth(postVars["username"],postVars["password"])
-			for k,v in parse.parseEnrollment(pull.pullEnrollment(browser)).iteritems():
-				data[k]=v
 		except (Exception, ValueError) as e:
 			data["usr"]=postVars["username"]
 			if type(e)==ValueError:
@@ -40,6 +38,8 @@ class ReqHandler(webapp2.RequestHandler):
 			self.response.write(signin.render(**data))
 			print "Error "+str(e)
 			return
+		for k,v in parse.parseEnrollment(pull.pullEnrollment(browser)).iteritems():
+			data[k]=v
 		data["studentno"]=postVars["username"][1:]
 		ttData=parse.parseTimetable(pull.pullTimetable(browser))
 		data["courselist"]=[Course(code=i[0],title=i[1],hours=i[2]) for i in ttData]

@@ -91,6 +91,9 @@ def parseEnrollment(page):
 		if _rightProp(x,"qut-student-name","class"):
 			data["studentname"]=x.find('tbody').find('tr').find('td').contents[0].strip().replace(" - ","-")
 	units=0
+	if table==None:
+		data["enrollment"]="Not currently enrolled"
+		return data
 	for i in table.contents[1:-1]:
 		units+=int(_nthGenElem(i.children,6).contents[0])
 	if units>=36:

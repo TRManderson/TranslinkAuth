@@ -10,7 +10,7 @@
 	% if hours >= 12:
 		% if enrollment=="Full Time":
 			<p>They are considered a full time student and attend 12 or more contact hours a week</p>
-		% else:
+		% elif enrollment=="Part Time":
 			<p>They attend 12 or more contact hours a week</p>
 		%endif
 	% elif enrollment=="Full Time":
