@@ -53,5 +53,6 @@ urls = [
 	]
 
 app=webapp2.WSGIApplication(urls,debug=True)
-from paste import httpserver
-httpserver.serve(app)
+if __name__=="__main__":
+	from paste import httpserver
+	httpserver.serve(app)
